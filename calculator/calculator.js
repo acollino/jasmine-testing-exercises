@@ -39,23 +39,54 @@ function update() {
 // calculate the monthly payment.  The output should be a string
 // that always has 2 decimal places.
 function calculateMonthlyPayment(values) {
-  let principle = values.amount;
-  let periodicInterest = values.rate / 12;
-  let numberOfPayments = values.years * 12;
-  let monthly;
-  if (periodicInterest != 0) {
-    let numerator = principle * periodicInterest;
-    let denominator = 1 - Math.pow((1 + periodicInterest), -1 * numberOfPayments);
-    monthly = numerator / denominator;
+  if (checkImproperInputs(values)) {
+    return "0, Invalid inputs detected.";
   }
-  else {
-    monthly = principle / numberOfPayments;
+  let monthlyValues = {
+    principle: values.amount,
+    periodicInterest: values.rate / 12,
+    numberOfPayments: values.years * 12,
+  };
+  let monthly;
+  if (values.years == 0) {
+    monthly = calculateImmediatePayment(monthlyValues);
+  } else if (values.rate == 0) {
+    monthly = calculateMonthyNoInterest(monthlyValues);
+  } else {
+    monthly = calculateMonthyWithInterest(monthlyValues);
   }
   return monthly.toFixed(2);
+}
+
+function checkImproperInputs(values) {
+  for (property in values) {
+    let isNotPrimitiveNum = typeof (values[property]) != "number";
+    let isNotNumber = typeof (values[property]) != "Number";
+    let isNaN = Number.isNaN(values[property]);
+    if ((isNotPrimitiveNum && isNotNumber) || isNaN) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function calculateMonthyWithInterest(values) {
+  let numerator = values.principle * values.periodicInterest;
+  let denominator =
+    1 - Math.pow(1 + values.periodicInterest, -1 * values.numberOfPayments);
+  return numerator / denominator;
+}
+
+function calculateMonthyNoInterest(values) {
+  return values.principle / values.numberOfPayments;
+}
+
+function calculateImmediatePayment(values) {
+  return values.principle;
 }
 
 // Given a string representing the monthly payment value,
 // update the UI to show the value.
 function updateMonthly(monthly) {
-  document.getElementById("monthly-payment").textContent = "$"+monthly;
+  document.getElementById("monthly-payment").textContent = "$" + monthly;
 }
