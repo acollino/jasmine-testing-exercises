@@ -42,9 +42,15 @@ function calculateMonthlyPayment(values) {
   let principle = values.amount;
   let periodicInterest = values.rate / 12;
   let numberOfPayments = values.years * 12;
-  let numerator = principle * periodicInterest;
-  let denominator = 1 - Math.pow((1 + periodicInterest), -1 * numberOfPayments);
-  let monthly = numerator / denominator;
+  let monthly;
+  if (periodicInterest != 0) {
+    let numerator = principle * periodicInterest;
+    let denominator = 1 - Math.pow((1 + periodicInterest), -1 * numberOfPayments);
+    monthly = numerator / denominator;
+  }
+  else {
+    monthly = principle / numberOfPayments;
+  }
   return monthly.toFixed(2);
 }
 
