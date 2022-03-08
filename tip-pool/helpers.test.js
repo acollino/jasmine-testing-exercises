@@ -29,12 +29,15 @@ describe("Helpers tests", function () {
     expect(calculateTipPercent(30, 0)).toEqual(0);
   });
 
-  it("should append a row to the given table in appendTd()", function () {
-    appendTd(serverTbody, "testServer");
-    appendTd(paymentTbody, "testPayment");
+  it("should append cells to a single row in appendTd()", function () {
+    let testTr = document.createElement('tr');
+    appendTd(testTr, "testServer1");
+    appendTd(testTr, "testServer2");
+    appendTd(testTr, "testServer3");
+    serverTbody.append(testTr);
 
     expect(serverTbody.children.length).toEqual(1);
-    expect(paymentTbody.children.length).toEqual(1);
+    expect(testTr.children.length).toEqual(3);
   });
 
   afterEach(function () {
@@ -42,10 +45,6 @@ describe("Helpers tests", function () {
     paymentId = 0;
     billAmtInput.value = "";
     tipAmtInput.value = "";
-    paymentTbody.innerHTML = "";
     serverTbody.innerHTML = "";
-    summaryTds[0].innerHTML = "";
-    summaryTds[1].innerHTML = "";
-    summaryTds[2].innerHTML = "";
   });
 });
