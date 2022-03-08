@@ -40,11 +40,34 @@ describe("Helpers tests", function () {
     expect(testTr.children.length).toEqual(3);
   });
 
+  it("should append a functional deleteButton to a server row in appendDeleteBtn()", function () {
+    let serverTr = document.createElement('tr');
+    appendTd(serverTr, "testServer1");
+    appendDeleteBtn(serverTr);
+    serverTbody.append(serverTr);
+
+    expect(serverTbody.children.length).toEqual(1);
+    document.querySelector(".delete").click();
+    expect(serverTbody.children.length).toEqual(0);
+  });
+
+  it("should append a functional deleteButton to a payment row in appendDeleteBtn()", function () {
+    let paymentTr = document.createElement('tr');
+    appendTd(paymentTr, "testPayment1");
+    appendDeleteBtn(paymentTr);
+    paymentTbody.append(paymentTr);
+
+    expect(paymentTbody.children.length).toEqual(1);
+    document.querySelector(".delete").click();
+    expect(paymentTbody.children.length).toEqual(0);
+  });
+
   afterEach(function () {
     allPayments = {};
     paymentId = 0;
     billAmtInput.value = "";
     tipAmtInput.value = "";
     serverTbody.innerHTML = "";
+    paymentTbody.innerHTML = "";
   });
 });
